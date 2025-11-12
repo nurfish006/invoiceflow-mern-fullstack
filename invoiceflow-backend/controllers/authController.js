@@ -1,3 +1,7 @@
+const User = require('../models/User');  // ← This line might be wrong
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
 const registerUser = async (req, res) => {
   try {
     // 1. Get data from request body

@@ -18,7 +18,14 @@ mongoose.connect(process.env.MONGO_URI)
 app.get('/', (req, res) => {
   res.json({ message: 'InvoiceFlow Backend is running!' });
 });
-
+app.post('/api/auth/register', (req, res) => {
+  console.log('Registration attempt:', req.body);
+  res.json({ 
+    success: true, 
+    message: 'Registration would work here!',
+    user: req.body 
+  });
+});
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
