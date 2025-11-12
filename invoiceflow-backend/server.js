@@ -1,3 +1,4 @@
+// server.js - CLEAN FIXED VERSION
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,29 +6,46 @@ require('dotenv').config();
 
 const app = express();
 
-// Middleware - software that runs between request and response
-//app.use(cors()); // Allow frontend to connect
-app.use(express.json()); // Understand JSON data
-// Add to server.js after require statements
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected Successfully'))
-  .catch(err => console.error('MongoDB Connection Error:', err));
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+app.use(express.json());
 
-  app.use('/api/auth', require('./routes/auth'));
-// Basic route - test if server works
+// ✅ Test route - PUT THIS FIRST
 app.get('/', (req, res) => {
+  console.log('✅ Root route called');
   res.json({ message: 'InvoiceFlow Backend is running!' });
 });
+
+// ✅ Simple test route
+app.get('/api/test', (req, res) => {
+  console.log('✅ Test route called');
+  res.json({ message: 'Test route working!' });
+});
+
+// ✅ Simple register route (temporary)
 app.post('/api/auth/register', (req, res) => {
-  console.log('Registration attempt:', req.body);
+  console.log('✅ Register route called:', req.body);
   res.json({ 
     success: true, 
-    message: 'Registration would work here!',
+    message: 'Registration working!',
     user: req.body 
   });
 });
-// Start server
+
+// Database connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB Connected Successfully'))
+  .catch(err => {
+    console.error('❌ MongoDB Connection Error:', err);
+    process.exit(1);
+  });
+
+// ✅ Use port 5000 (consistent with frontend)
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`✅ Frontend: http://localhost:5173`);
 });
