@@ -1,4 +1,6 @@
+// src/components/layout/DashboardLayout.jsx - UPDATE NAVIGATION
 import { useAuth } from '../../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const DashboardLayout = ({ children }) => {
   const { user, logout } = useAuth();
@@ -18,18 +20,15 @@ const DashboardLayout = ({ children }) => {
         </div>
         
         <nav className="mt-6">
-          <a href="/" className="block py-2 px-6 text-gray-700 hover:bg-gray-100 bg-gray-100">
+          <Link to="/" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
             📊 Dashboard
-          </a>
-          <a href="#" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
+          </Link>
+          <Link to="/invoices" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
             📄 Invoices
-          </a>
-          <a href="#" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
+          </Link>
+          <Link to="/clients" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
             👥 Clients
-          </a>
-          <a href="#" className="block py-2 px-6 text-gray-700 hover:bg-gray-100">
-            ⚙️ Settings
-          </a>
+          </Link>
           <button 
             onClick={logout}
             className="block w-full text-left py-2 px-6 text-gray-700 hover:bg-gray-100 mt-4"
@@ -45,7 +44,7 @@ const DashboardLayout = ({ children }) => {
           <div className="flex justify-between items-center">
             <h2 className="text-lg font-semibold">Dashboard</h2>
             <div className="text-sm text-gray-600">
-              {user?.name}
+              {user?.email}
             </div>
           </div>
         </header>
