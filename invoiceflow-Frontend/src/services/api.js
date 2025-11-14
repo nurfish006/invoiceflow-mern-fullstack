@@ -27,4 +27,18 @@ export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),
 };
 
+export const clientsAPI = {
+  getClients: () => api.get('/clients'),
+  createClient: (clientData) => api.post('/clients', clientData),
+  updateClient: (id, clientData) => api.put(`/clients/${id}`, clientData),
+  deleteClient: (id) => api.delete(`/clients/${id}`)
+};
+
+export const invoicesAPI = {
+  getInvoices: () => api.get('/invoices'),
+  getInvoice: (id) => api.get(`/invoices/${id}`),
+  createInvoice: (invoiceData) => api.post('/invoices', invoiceData),
+  updateInvoice: (id, invoiceData) => api.put(`/invoices/${id}`, invoiceData),
+  deleteInvoice: (id) => api.delete(`/invoices/${id}`)
+};
 export default api;
