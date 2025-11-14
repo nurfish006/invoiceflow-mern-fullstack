@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const authRoutes = require('./routes/auth');
 
 const app = express();
 
@@ -13,27 +14,20 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// ✅ Test route - PUT THIS FIRST
+//Test route 
 app.get('/', (req, res) => {
-  console.log('✅ Root route called');
+  console.log('Root route called');
   res.json({ message: 'InvoiceFlow Backend is running!' });
 });
 
-// ✅ Simple test route
+//  Simple test route
 app.get('/api/test', (req, res) => {
-  console.log('✅ Test route called');
+  console.log(' Test route called');
   res.json({ message: 'Test route working!' });
 });
 
-// ✅ Simple register route (temporary)
-app.post('/api/auth/register', (req, res) => {
-  console.log('✅ Register route called:', req.body);
-  res.json({ 
-    success: true, 
-    message: 'Registration working!',
-    user: req.body 
-  });
-});
+// Simple register route 
+app.use('/api/auth', authRoutes);
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
