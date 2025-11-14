@@ -1,47 +1,32 @@
-// server.js - CLEAN FIXED VERSION
+// server.js - UPDATED
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
-const authRoutes = require('./routes/auth');
 
 const app = express();
 
 // Middleware
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
-
-//Test route 
-app.get('/', (req, res) => {
-  console.log('Root route called');
-  res.json({ message: 'InvoiceFlow Backend is running!' });
-});
-
-//  Simple test route
-app.get('/api/test', (req, res) => {
-  console.log(' Test route called');
-  res.json({ message: 'Test route working!' });
-});
-
-// route 
-app.use('/api/auth', authRoutes);
-app.use('/api/clients', require('./routes/clients'));
-app.use('/api/invoices', require('./routes/invoices'));
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('✅ MongoDB Connected Successfully'))
-  .catch(err => {
-    console.error('❌ MongoDB Connection Error:', err);
-    process.exit(1);
-  });
+  .then(() => console.log('MongoDB Connected Successfully'))
+  .catch(err => console.error('MongoDB Connection Error:', err));
 
-// ✅ Use port 5000 (consistent with frontend)
+// Routes
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/invoices', require('./routes/invoices'));
+
+// Test route
+app.get('/', (req, res) => {
+  res.json({ message: 'InvoiceFlow Backend is running!' });
+});
+
+// Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`✅ Server running on http://localhost:${PORT}`);
-  console.log(`✅ Frontend: http://localhost:5173`);
+  console.log(`Server running on port ${PORT}`);
 });

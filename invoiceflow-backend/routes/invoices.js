@@ -1,10 +1,10 @@
 const express = require('express');
 const { 
   getInvoices, 
+  getInvoice,
   createInvoice, 
   updateInvoice, 
-  deleteInvoice,
-  getInvoice 
+  deleteInvoice 
 } = require('../controllers/invoiceController');
 const { protect } = require('../middleware/auth');
 const router = express.Router();
