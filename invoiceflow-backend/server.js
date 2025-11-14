@@ -26,8 +26,10 @@ app.get('/api/test', (req, res) => {
   res.json({ message: 'Test route working!' });
 });
 
-// Simple register route 
+// route 
 app.use('/api/auth', authRoutes);
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/invoices', require('./routes/invoices'));
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI)
