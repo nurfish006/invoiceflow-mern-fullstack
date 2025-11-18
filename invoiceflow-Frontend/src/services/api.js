@@ -40,12 +40,20 @@ export const invoicesAPI = {
   createInvoice: (invoiceData) => api.post('/invoices', invoiceData),
   updateInvoice: (id, invoiceData) => api.put(`/invoices/${id}`, invoiceData),
   deleteInvoice: (id) => api.delete(`/invoices/${id}`),
-  downloadPDF: (id) => api.get(`/invoices/${id}/pdf`, { 
-    responseType: 'blob' // ← CRITICAL: Tells axios to handle binary data
-  }),
+  downloadPDF: (id) => 
+    api.get(`/invoices/${id}/pdf`, { 
+      responseType: 'blob',
+      headers: {
+        'Accept': 'application/pdf'
+      }
+    }),
   
-  previewPDF: (id) => api.get(`/invoices/${id}/preview`, { 
-    responseType: 'blob' 
-  })
+  previewPDF: (id) => 
+    api.get(`/invoices/${id}/preview`, { 
+      responseType: 'blob',
+      headers: {
+        'Accept': 'application/pdf'
+      }
+    })
 };
 export default api;

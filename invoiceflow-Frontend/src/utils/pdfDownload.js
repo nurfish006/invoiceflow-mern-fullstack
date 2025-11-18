@@ -1,19 +1,25 @@
 export const downloadPDF = (pdfBlob, filename = 'invoice.pdf') => {
-  // Create a temporary URL for the blob
-  const url = window.URL.createObjectURL(new Blob([pdfBlob]));
-  const link = document.createElement('a');
-  link.href = url;
-  
-  // Set download attributes
-  link.setAttribute('download', filename);
-  document.body.appendChild(link);
-  
-  // Trigger download
-  link.click();
-  
-  // Cleanup
-  link.remove();
-  window.URL.revokeObjectURL(url);
+  try {
+    // Create a Blob with proper PDF MIME type
+    const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    
+    // Trigger download
+    link.click();
+    
+    // Cleanup
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+    
+  } catch (error) {
+    console.error('PDF download error:', error);
+    alert('Error downloading PDF. Please try again.');
+  }
 };
 
 /**
@@ -21,9 +27,19 @@ export const downloadPDF = (pdfBlob, filename = 'invoice.pdf') => {
  * @param {Blob} pdfBlob - PDF data from API
  */
 export const previewPDF = (pdfBlob) => {
-  const url = window.URL.createObjectURL(new Blob([pdfBlob]));
-  window.open(url, '_blank');
-  
-  // Note: We don't revoke URL immediately for preview
-  // Browser will handle cleanup when tab closes
+  try {
+    // Create Blob with proper MIME type
+    const blob = new Blob([pdfBlob], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    
+    // Open in new tab - browser will handle PDF rendering
+    window.open(url, '_blank');
+    
+    // Note: Don't revoke URL immediately for preview
+    // Let the browser handle it when tab closes
+    
+  } catch (error) {
+    console.error('PDF preview error:', error);
+    alert('Error previewing PDF. Please try again.');
+  }
 };

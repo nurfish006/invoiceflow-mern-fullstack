@@ -64,34 +64,68 @@ const Invoices = () => {
     );
   }
 // Download PDF
-  const handleDownloadPDF = async (invoiceId, invoiceNumber) => {
-    try {
-      // Show loading state
-      setLoading(true);
-      
-      const response = await invoicesAPI.downloadPDF(invoiceId);
-      downloadPDF(response.data, `invoice-${invoiceNumber}.pdf`);
-      
-    } catch (error) {
-      console.error('PDF download error:', error);
-      alert('Error generating PDF. Please try again.');
-    } finally {
-      setLoading(false);
+  // In pages/Invoices.jsx - UPDATE PDF HANDLERS
+const handleDownloadPDF = async (invoiceId, invoiceNumber) => {
+  try {
+    setLoading(true);
+    
+    const response = await invoicesAPI.downloadPDF(invoiceId);
+    
+    // Verify we got PDF data
+    if (!response.data || response.data.size === 0) {
+      throw new Error('Empty PDF response');
     }
-  };
-//Preview PDF in browser
-  const handlePreviewPDF = async (invoiceId) => {
-    try {
-      setLoading(true);
-      const response = await invoicesAPI.previewPDF(invoiceId);
-      previewPDF(response.data);
-    } catch (error) {
-      console.error('PDF preview error:', error);
-      alert('Error generating PDF preview.');
-    } finally {
-      setLoading(false);
+    
+    // Check if it's actually a PDF by checking the first few bytes
+    const data = await response.data.arrayBuffer();
+    const header = new Uint8Array(data).subarray(0, 4);
+    const headerStr = Array.from(header).map(byte => String.fromCharCode(byte)).join('');
+    
+    if (headerStr !== '%PDF') {
+      throw new Error('Invalid PDF format received');
     }
-  };
+    
+    // Convert back to blob for download
+    const pdfBlob = new Blob([data], { type: 'application/pdf' });
+    downloadPDF(pdfBlob, `invoice-${invoiceNumber}.pdf`);
+    
+  } catch (error) {
+    console.error('PDF download error:', error);
+    alert(`Error generating PDF: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handlePreviewPDF = async (invoiceId) => {
+  try {
+    setLoading(true);
+    
+    const response = await invoicesAPI.previewPDF(invoiceId);
+    
+    // Verify PDF data
+    if (!response.data || response.data.size === 0) {
+      throw new Error('Empty PDF response');
+    }
+    
+    const data = await response.data.arrayBuffer();
+    const header = new Uint8Array(data).subarray(0, 4);
+    const headerStr = Array.from(header).map(byte => String.fromCharCode(byte)).join('');
+    
+    if (headerStr !== '%PDF') {
+      throw new Error('Invalid PDF format received');
+    }
+    
+    const pdfBlob = new Blob([data], { type: 'application/pdf' });
+    previewPDF(pdfBlob);
+    
+  } catch (error) {
+    console.error('PDF preview error:', error);
+    alert(`Error previewing PDF: ${error.message}`);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <ProtectedRoute>
