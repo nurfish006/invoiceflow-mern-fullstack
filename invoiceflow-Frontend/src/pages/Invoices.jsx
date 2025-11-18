@@ -6,12 +6,15 @@ import { Button } from '../components/ui/Button';
 import InvoiceForm from '../components/InvoiceForm';
 import { invoicesAPI } from '../services/api';
 import { downloadPDF, previewPDF } from '../utils/pdfDownload';
+import SendInvoiceModal from '../components/SendInvoiceModal';
 
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingInvoice, setEditingInvoice] = useState(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
   useEffect(() => {
     loadInvoices();
@@ -126,7 +129,16 @@ const handlePreviewPDF = async (invoiceId) => {
     setLoading(false);
   }
 };
+  const handleSendEmail = (invoice) => {
+    setSelectedInvoice(invoice);
+    setShowEmailModal(true);
+  };
 
+  const handleEmailSuccess = () => {
+    setShowEmailModal(false);
+    setSelectedInvoice(null);
+    loadInvoices(); // Refresh to show updated status
+  };
   return (
     <ProtectedRoute>
       <DashboardLayout>
@@ -182,7 +194,18 @@ const handlePreviewPDF = async (invoiceId) => {
                 </div>
                 
                 <div className="flex space-x-2 ml-4">
-                  {/* PDF ACTIONS */}
+               {/* EMAIL ACTION */}
+                <Button 
+                  variant="secondary" 
+                  size="sm"
+                  onClick={() => handleSendEmail(invoice)}
+                  title="Send via Email"
+                  disabled={!invoice.clientId?.email}
+                >
+                  📧 Email
+                </Button>
+
+             {/* PDF ACTIONS */}
             <Button 
               variant="secondary" 
               size="sm"

@@ -10,6 +10,9 @@ const {
   generateInvoicePDFController, 
   previewInvoicePDF 
 } = require('../controllers/pdfController');
+const { 
+  sendInvoiceEmailController 
+} = require('../controllers/emailController');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
@@ -28,5 +31,8 @@ router.route('/:id/pdf')
 
 router.route('/:id/preview')  
   .get(protect, previewInvoicePDF);
+
+router.route('/:id/send-email')
+  .post(protect, sendInvoiceEmailController);
 
 module.exports = router;

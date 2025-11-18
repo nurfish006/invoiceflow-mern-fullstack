@@ -54,6 +54,12 @@ export const invoicesAPI = {
       headers: {
         'Accept': 'application/pdf'
       }
-    })
+    }),
+
+  sendInvoiceEmail: (invoiceId, data) => 
+    api.post(`/invoices/${invoiceId}/send-email`, data),   
+};
+export const emailAPI = {
+  verifyConfiguration: () => api.get('/email/verify'),
 };
 export default api;

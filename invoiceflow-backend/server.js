@@ -24,6 +24,10 @@ app.use('/api/invoices', require('./routes/invoices'));
 app.get('/', (req, res) => {
   res.json({ message: 'InvoiceFlow Backend is running!' });
 });
+app.get('/api/email/test', async (req, res) => {
+  const verification = await verifyEmailSetup();
+  res.json(verification);
+});
 
 // Start server
 const PORT = process.env.PORT || 5000;
