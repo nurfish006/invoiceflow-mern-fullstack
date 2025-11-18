@@ -7,17 +7,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
+        blue: {
           50: '#f0f9ff',
           100: '#e0f2fe',
           200: '#bae6fd',
           300: '#7dd3fc',
           400: '#38bdf8',
           500: '#3b82f6',  // Your main primary color
-          600: '#2563eb',  // Hover state
-          700: '#1d4ed8',  // Active state
+          600: '#eb3c25ff',  // Hover state
+          700: '#d8581dff',  // Active state
           800: '#1e40af',
-          900: '#1e3a8a',
+          900: '#c20a0aff',
         }
       },
       // Optional: Extend spacing, borderRadius, etc.
