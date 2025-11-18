@@ -5,6 +5,7 @@ import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import InvoiceForm from '../components/InvoiceForm';
 import { invoicesAPI } from '../services/api';
+import { downloadPDF, previewPDF } from '../utils/pdfDownload';
 
 const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
@@ -62,6 +63,35 @@ const Invoices = () => {
       </ProtectedRoute>
     );
   }
+// Download PDF
+  const handleDownloadPDF = async (invoiceId, invoiceNumber) => {
+    try {
+      // Show loading state
+      setLoading(true);
+      
+      const response = await invoicesAPI.downloadPDF(invoiceId);
+      downloadPDF(response.data, `invoice-${invoiceNumber}.pdf`);
+      
+    } catch (error) {
+      console.error('PDF download error:', error);
+      alert('Error generating PDF. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+//Preview PDF in browser
+  const handlePreviewPDF = async (invoiceId) => {
+    try {
+      setLoading(true);
+      const response = await invoicesAPI.previewPDF(invoiceId);
+      previewPDF(response.data);
+    } catch (error) {
+      console.error('PDF preview error:', error);
+      alert('Error generating PDF preview.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -74,7 +104,7 @@ const Invoices = () => {
           <Button onClick={() => setShowForm(true)}>
             + Create Invoice
           </Button>
-        </div>
+        </div> 
 
         {showForm && (
           <Card className="mb-6">
@@ -116,7 +146,25 @@ const Invoices = () => {
                     <p className="text-sm text-gray-500 mt-2">{invoice.notes}</p>
                   )}
                 </div>
-
+                 <div className="flex space-x-2 ml-4">
+            {/* PDF ACTIONS */}
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={() => handlePreviewPDF(invoice._id)}
+              title="Preview PDF"
+            >
+              👁️ Preview
+            </Button>
+            
+            <Button 
+              variant="secondary" 
+              size="sm"
+              onClick={() => handleDownloadPDF(invoice._id, invoice.invoiceNumber)}
+              title="Download PDF"
+            >
+              📥 Download
+            </Button>
                 <div className="flex space-x-2 ml-4">
                   <Button 
                     variant="secondary" 
