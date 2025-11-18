@@ -146,8 +146,9 @@ const Invoices = () => {
                     <p className="text-sm text-gray-500 mt-2">{invoice.notes}</p>
                   )}
                 </div>
-                 <div className="flex space-x-2 ml-4">
-            {/* PDF ACTIONS */}
+                
+                <div className="flex space-x-2 ml-4">
+                  {/* PDF ACTIONS */}
             <Button 
               variant="secondary" 
               size="sm"
@@ -165,7 +166,6 @@ const Invoices = () => {
             >
               📥 Download
             </Button>
-                <div className="flex space-x-2 ml-4">
                   <Button 
                     variant="secondary" 
                     size="sm"
